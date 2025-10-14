@@ -8,6 +8,9 @@ import Alarms from "./pages/Alarms";
 import AddAlarm from "./pages/AddAlarm";
 import ChooseTask from "./pages/ChooseTask";
 import TicTacToe from "./pages/TicTacToe";
+import Puzzle from "./pages/Puzzle";
+import PhotoTask from "./pages/PhotoTask";
+import Activity from "./pages/Activity";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -25,6 +28,9 @@ const App = () => (
           <Route path="/add-alarm" element={<AddAlarm />} />
           <Route path="/choose-task" element={<ChooseTask />} />
           <Route path="/task/tictactoe" element={<TicTacToe />} />
+          <Route path="/task/puzzle" element={<Puzzle />} />
+          <Route path="/task/photo" element={<PhotoTask />} />
+          <Route path="/task/activity" element={<Activity />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
