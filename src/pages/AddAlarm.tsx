@@ -82,7 +82,12 @@ const AddAlarm = () => {
           </Button>
           <Button
             className="flex-1 h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
-            onClick={() => navigate("/choose-task")}
+            onClick={() => {
+              const paddedHour = String(hour).padStart(2, "0");
+              const paddedMinute = String(minute).padStart(2, "0");
+              const timeString = `${paddedHour}:${paddedMinute} ${period}`;
+              navigate("/choose-task", { state: { time: timeString } });
+            }}
           >
             Choose time
             <Check size={20} className="ml-2" />

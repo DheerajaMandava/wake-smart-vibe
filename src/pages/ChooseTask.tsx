@@ -1,6 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAlarms } from "@/contexts/AlarmContext";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 interface TaskOption {
@@ -44,6 +46,20 @@ const tasks: TaskOption[] = [
 
 const ChooseTask = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { addAlarm } = useAlarms();
+  const time = location.state?.time || "9:00 AM";
+
+  const handleTaskSelect = (taskName: string, taskRoute: string) => {
+    addAlarm({
+      time,
+      days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      isActive: true,
+      task: taskName,
+    });
+    toast.success("Alarm created successfully!");
+    navigate(taskRoute);
+  };
 
   return (
     <div className="min-h-screen bg-background pb-6">
@@ -59,7 +75,7 @@ const ChooseTask = () => {
           {tasks.map((task) => (
             <button
               key={task.id}
-              onClick={() => navigate(task.route)}
+              onClick={() => handleTaskSelect(task.title, task.route)}
               className="w-full bg-secondary/50 hover:bg-secondary/70 rounded-2xl p-4 flex items-center gap-4 transition-colors"
             >
               <div className="text-4xl">{task.icon}</div>

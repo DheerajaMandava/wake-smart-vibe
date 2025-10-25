@@ -1,36 +1,14 @@
-import { useState } from "react";
 import { Plus, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 import AlarmCard from "@/components/AlarmCard";
 import { Button } from "@/components/ui/button";
+import { useAlarms } from "@/contexts/AlarmContext";
 import logo from "@/assets/logo.png";
-
-interface Alarm {
-  id: string;
-  time: string;
-  days: string[];
-  isActive: boolean;
-  task: string;
-}
 
 const Alarms = () => {
   const navigate = useNavigate();
-  const [alarms, setAlarms] = useState<Alarm[]>([
-    { id: "1", time: "7:00 AM", days: ["M", "T", "W", "T", "F"], isActive: true, task: "puzzle" },
-    { id: "2", time: "10:30 AM", days: ["M", "T", "W", "T", "F"], isActive: false, task: "tictactoe" },
-    { id: "3", time: "8:00 AM", days: ["M", "T", "F"], isActive: true, task: "photo" },
-  ]);
-
-  const handleToggle = (id: string) => {
-    setAlarms(alarms.map(alarm => 
-      alarm.id === id ? { ...alarm, isActive: !alarm.isActive } : alarm
-    ));
-  };
-
-  const handleDelete = (id: string) => {
-    setAlarms(alarms.filter(alarm => alarm.id !== id));
-  };
+  const { alarms, toggleAlarm, deleteAlarm } = useAlarms();
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -70,8 +48,8 @@ const Alarms = () => {
               time={alarm.time}
               days={alarm.days}
               isActive={alarm.isActive}
-              onToggle={() => handleToggle(alarm.id)}
-              onDelete={() => handleDelete(alarm.id)}
+              onToggle={() => toggleAlarm(alarm.id)}
+              onDelete={() => deleteAlarm(alarm.id)}
               onClick={() => navigate("/add-alarm")}
             />
           ))}
