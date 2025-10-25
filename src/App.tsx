@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Welcome from "./pages/Welcome";
 import Alarms from "./pages/Alarms";
 import AddAlarm from "./pages/AddAlarm";
+import SelectDays from "./pages/SelectDays";
 import ChooseTask from "./pages/ChooseTask";
 import TicTacToe from "./pages/TicTacToe";
 import Puzzle from "./pages/Puzzle";
@@ -25,6 +26,7 @@ const App = () => (
         <Route path="/" element={<Welcome />} />
         <Route path="/alarms" element={<Alarms />} />
         <Route path="/add-alarm" element={<AddAlarm />} />
+        <Route path="/select-days" element={<SelectDays />} />
         <Route path="/choose-task" element={<ChooseTask />} />
         <Route path="/task/tictactoe" element={<TicTacToe />} />
         <Route path="/task/puzzle" element={<Puzzle />} />

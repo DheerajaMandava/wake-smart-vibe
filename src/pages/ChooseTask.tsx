@@ -49,16 +49,17 @@ const ChooseTask = () => {
   const location = useLocation();
   const { addAlarm } = useAlarms();
   const time = location.state?.time || "9:00 AM";
+  const days = location.state?.days || ["Mon", "Tue", "Wed", "Thu", "Fri"];
 
-  const handleTaskSelect = (taskName: string, taskRoute: string) => {
+  const handleTaskSelect = (taskName: string) => {
     addAlarm({
       time,
-      days: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      days,
       isActive: true,
       task: taskName,
     });
     toast.success("Alarm created successfully!");
-    navigate(taskRoute);
+    setTimeout(() => navigate("/alarms"), 500);
   };
 
   return (
@@ -75,7 +76,7 @@ const ChooseTask = () => {
           {tasks.map((task) => (
             <button
               key={task.id}
-              onClick={() => handleTaskSelect(task.title, task.route)}
+              onClick={() => handleTaskSelect(task.title)}
               className="w-full bg-secondary/50 hover:bg-secondary/70 rounded-2xl p-4 flex items-center gap-4 transition-colors"
             >
               <div className="text-4xl">{task.icon}</div>

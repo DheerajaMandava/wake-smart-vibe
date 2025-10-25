@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export interface Alarm {
   id: string;
@@ -17,6 +19,13 @@ interface AlarmContextType {
 
 const AlarmContext = createContext<AlarmContextType | undefined>(undefined);
 
+const taskRoutes: Record<string, string> = {
+  "Tic-Tac-Toe": "/task/tictactoe",
+  "Puzzles": "/task/puzzle",
+  "Photo Task": "/task/photo",
+  "Activity": "/task/activity",
+};
+
 export const AlarmProvider = ({ children }: { children: ReactNode }) => {
   const [alarms, setAlarms] = useState<Alarm[]>([
     {
@@ -27,6 +36,36 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
       task: "Tic-Tac-Toe",
     },
   ]);
+
+  // Check alarms every minute
+  useEffect(() => {
+    const checkAlarms = () => {
+      const now = new Date();
+      const currentTime = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+      const currentDay = now.toLocaleDateString("en-US", { weekday: "short" });
+
+      alarms.forEach((alarm) => {
+        if (
+          alarm.isActive &&
+          alarm.time === currentTime &&
+          alarm.days.includes(currentDay)
+        ) {
+          const route = taskRoutes[alarm.task] || "/task/puzzle";
+          toast.info(`Alarm: ${alarm.time} - Complete ${alarm.task} to dismiss!`);
+          window.location.href = route;
+        }
+      });
+    };
+
+    const interval = setInterval(checkAlarms, 30000); // Check every 30 seconds
+    checkAlarms(); // Check immediately
+
+    return () => clearInterval(interval);
+  }, [alarms]);
 
   const addAlarm = (alarm: Omit<Alarm, "id">) => {
     const newAlarm: Alarm = {
