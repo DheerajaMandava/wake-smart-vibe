@@ -18,50 +18,36 @@ const AddAlarm = () => {
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="p-6 text-center space-y-4">
-          <img src={logo} alt="PuzzAlarm" className="w-16 h-16 mx-auto" />
+          <img src={logo} alt="PuzzAlarm" className="w-24 h-24 mx-auto" />
         </div>
 
         {/* Time Picker */}
         <div className="flex-1 flex items-center justify-center">
           <div className="relative w-full max-w-xs">
             <div className="flex justify-center items-center gap-4 text-6xl font-light">
-              <div className="relative h-32 overflow-hidden">
-                <div 
-                  className="transition-transform duration-200"
-                  style={{ transform: `translateY(-${(hour - 1) * 128}px)` }}
-                >
-                  {hours.map((h, idx) => (
-                    <div
-                      key={idx}
-                      className={`h-32 flex items-center justify-center cursor-pointer ${
-                        parseInt(h) === hour ? "text-foreground" : "text-muted-foreground"
-                      }`}
-                      onClick={() => setHour(parseInt(h))}
-                    >
-                      {h}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <select 
+                value={hour}
+                onChange={(e) => setHour(parseInt(e.target.value))}
+                className="h-32 w-28 bg-transparent text-center text-6xl font-light cursor-pointer focus:outline-none appearance-none"
+              >
+                {hours.map((h) => (
+                  <option key={h} value={parseInt(h)} className="bg-background text-foreground">
+                    {h}
+                  </option>
+                ))}
+              </select>
               <span>:</span>
-              <div className="relative h-32 overflow-hidden">
-                <div 
-                  className="transition-transform duration-200"
-                  style={{ transform: `translateY(-${minute * 128}px)` }}
-                >
-                  {minutes.map((m, idx) => (
-                    <div
-                      key={idx}
-                      className={`h-32 flex items-center justify-center cursor-pointer ${
-                        parseInt(m) === minute ? "text-foreground" : "text-muted-foreground"
-                      }`}
-                      onClick={() => setMinute(parseInt(m))}
-                    >
-                      {m}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <select
+                value={minute}
+                onChange={(e) => setMinute(parseInt(e.target.value))}
+                className="h-32 w-28 bg-transparent text-center text-6xl font-light cursor-pointer focus:outline-none appearance-none"
+              >
+                {minutes.map((m) => (
+                  <option key={m} value={parseInt(m)} className="bg-background text-foreground">
+                    {m}
+                  </option>
+                ))}
+              </select>
             </div>
             
             {/* AM/PM Toggle */}
