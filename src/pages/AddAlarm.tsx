@@ -8,6 +8,7 @@ const AddAlarm = () => {
   const navigate = useNavigate();
   const [hour, setHour] = useState(9);
   const [minute, setMinute] = useState(50);
+  const [period, setPeriod] = useState<"AM" | "PM">("AM");
 
   const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
   const minutes = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
@@ -61,6 +62,24 @@ const AddAlarm = () => {
                   ))}
                 </div>
               </div>
+            </div>
+            
+            {/* AM/PM Toggle */}
+            <div className="flex justify-center gap-2 mt-8">
+              <Button
+                variant={period === "AM" ? "default" : "outline"}
+                className="w-20 h-12 rounded-full font-semibold"
+                onClick={() => setPeriod("AM")}
+              >
+                AM
+              </Button>
+              <Button
+                variant={period === "PM" ? "default" : "outline"}
+                className="w-20 h-12 rounded-full font-semibold"
+                onClick={() => setPeriod("PM")}
+              >
+                PM
+              </Button>
             </div>
           </div>
         </div>
