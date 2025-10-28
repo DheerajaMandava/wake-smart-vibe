@@ -41,20 +41,38 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkAlarms = () => {
       const now = new Date();
-      const currentTime = now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const period = hours >= 12 ? "PM" : "AM";
+      
+      // Convert to 12-hour format
+      hours = hours % 12;
+      hours = hours ? hours : 12; // 0 should be 12
+      
+      const currentTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${period}`;
       const currentDay = now.toLocaleDateString("en-US", { weekday: "short" });
 
+      console.log("Checking alarms - Current time:", currentTime, "Current day:", currentDay);
+      console.log("Active alarms:", alarms.filter(a => a.isActive));
+
       alarms.forEach((alarm) => {
+        console.log(`Comparing alarm ${alarm.id}:`, {
+          alarmTime: alarm.time,
+          currentTime,
+          timeMatch: alarm.time === currentTime,
+          alarmDays: alarm.days,
+          currentDay,
+          dayMatch: alarm.days.includes(currentDay),
+          isActive: alarm.isActive
+        });
+
         if (
           alarm.isActive &&
           alarm.time === currentTime &&
           alarm.days.includes(currentDay)
         ) {
           const route = taskRoutes[alarm.task] || "/task/puzzle";
+          console.log("🔔 ALARM TRIGGERED!", alarm);
           toast.info(`Alarm: ${alarm.time} - Complete ${alarm.task} to dismiss!`);
           window.location.href = route;
         }
