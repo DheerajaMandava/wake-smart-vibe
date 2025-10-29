@@ -20,7 +20,11 @@ const Settings = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-md mx-auto p-6 space-y-6">
         <div className="text-center space-y-4">
-          <img src={logo} alt="PuzzAlarm" className="w-16 h-16 mx-auto" />
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
+            <div className="w-full h-full rounded-full bg-card flex items-center justify-center p-1.5">
+              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
+            </div>
+          </div>
           <h1 className="text-2xl font-bold">Settings</h1>
         </div>
 

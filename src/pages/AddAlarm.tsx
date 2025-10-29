@@ -18,7 +18,11 @@ const AddAlarm = () => {
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="p-6 text-center space-y-4">
-          <img src={logo} alt="PuzzAlarm" className="w-16 h-16 mx-auto" />
+          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
+            <div className="w-full h-full rounded-full bg-background flex items-center justify-center p-1.5">
+              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
+            </div>
+          </div>
         </div>
 
         {/* Time Picker */}
