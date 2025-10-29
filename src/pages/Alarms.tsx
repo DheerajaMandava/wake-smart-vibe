@@ -26,15 +26,6 @@ const Alarms = () => {
           </p>
         </div>
 
-        {/* Clock Display */}
-        <div className="bg-card rounded-full w-48 h-48 mx-auto flex items-center justify-center border-4 border-border relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-1 h-16 bg-foreground origin-bottom absolute" style={{ transform: "rotate(90deg)" }} />
-            <div className="w-1 h-12 bg-foreground/60 origin-bottom absolute" style={{ transform: "rotate(180deg)" }} />
-            <div className="w-3 h-3 rounded-full bg-foreground absolute" />
-          </div>
-        </div>
-
         {/* Add Alarm Button */}
         <Button
           onClick={() => navigate("/add-alarm")}
