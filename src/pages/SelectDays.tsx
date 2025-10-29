@@ -40,7 +40,7 @@ const SelectDays = () => {
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="p-6 text-center space-y-4">
-          <img src={logo} alt="PuzzAlarm" className="w-24 h-24 mx-auto" />
+          <img src={logo} alt="PuzzAlarm" className="w-16 h-16 mx-auto" />
           <div>
             <h1 className="text-4xl font-light">{time}</h1>
             <p className="text-muted-foreground mt-2">Select Days</p>

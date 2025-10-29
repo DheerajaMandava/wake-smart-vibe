@@ -15,7 +15,7 @@ const Alarms = () => {
       <div className="max-w-md mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
-          <img src={logo} alt="PuzzAlarm" className="w-20 h-20 mx-auto" />
+          <img src={logo} alt="PuzzAlarm" className="w-16 h-16 mx-auto" />
           <h1 className="text-3xl font-bold">Alarms</h1>
           <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
             <Bell size={16} /> Sleep | Wake Up
