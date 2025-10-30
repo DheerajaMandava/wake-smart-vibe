@@ -1,6 +1,6 @@
 import React from "react";
+import { AlarmClock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import puzzleClockLogo from "@/assets/puzzle-clock-logo.png";
 
 interface LogoBadgeProps {
   size?: "lg" | "md" | "sm";
@@ -8,9 +8,9 @@ interface LogoBadgeProps {
 }
 
 const sizeMap = {
-  lg: { container: "w-28 h-28", image: "w-20 h-20" },
-  md: { container: "w-20 h-20", image: "w-14 h-14" },
-  sm: { container: "w-12 h-12", image: "w-8 h-8" },
+  lg: { container: "w-28 h-28", icon: 56 },
+  md: { container: "w-20 h-20", icon: 36 },
+  sm: { container: "w-12 h-12", icon: 24 },
 };
 
 const LogoBadge: React.FC<LogoBadgeProps> = ({ size = "md", className }) => {
@@ -23,10 +23,10 @@ const LogoBadge: React.FC<LogoBadgeProps> = ({ size = "md", className }) => {
       )}
     >
       <div className="w-full h-full rounded-full bg-card flex items-center justify-center">
-        <img 
-          src={puzzleClockLogo} 
-          alt="PuzzAlarm Logo" 
-          className={cn(s.image, "object-contain")}
+        <AlarmClock
+          size={s.icon}
+          className="text-accent drop-shadow-md"
+          strokeWidth={2.5}
         />
       </div>
     </div>
