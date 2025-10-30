@@ -4,7 +4,7 @@ import BottomNav from "@/components/BottomNav";
 import AlarmCard from "@/components/AlarmCard";
 import { Button } from "@/components/ui/button";
 import { useAlarms } from "@/contexts/AlarmContext";
-import logo from "@/assets/logo.png";
+import LogoBadge from "@/components/LogoBadge";
 
 const Alarms = () => {
   const navigate = useNavigate();
@@ -15,11 +15,7 @@ const Alarms = () => {
       <div className="max-w-md mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
-            <div className="w-full h-full rounded-full bg-card flex items-center justify-center p-1.5">
-              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
-            </div>
-          </div>
+          <LogoBadge />
           <h1 className="text-3xl font-bold">Alarms</h1>
           <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
             <Bell size={16} /> Sleep | Wake Up

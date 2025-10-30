@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.png";
+import LogoBadge from "@/components/LogoBadge";
 
 const AddAlarm = () => {
   const navigate = useNavigate();
@@ -18,11 +18,7 @@ const AddAlarm = () => {
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
         <div className="p-6 text-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
-            <div className="w-full h-full rounded-full bg-background flex items-center justify-center p-1.5">
-              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
-            </div>
-          </div>
+          <LogoBadge />
         </div>
 
         {/* Time Picker */}

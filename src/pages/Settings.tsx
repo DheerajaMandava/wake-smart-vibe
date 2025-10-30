@@ -1,5 +1,5 @@
 import BottomNav from "@/components/BottomNav";
-import logo from "@/assets/logo.png";
+import LogoBadge from "@/components/LogoBadge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -20,11 +20,7 @@ const Settings = () => {
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-md mx-auto p-6 space-y-6">
         <div className="text-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
-            <div className="w-full h-full rounded-full bg-card flex items-center justify-center p-1.5">
-              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
-            </div>
-          </div>
+          <LogoBadge />
           <h1 className="text-2xl font-bold">Settings</h1>
         </div>
 

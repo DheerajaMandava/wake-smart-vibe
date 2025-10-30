@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
-import logo from "@/assets/logo.png";
+import LogoBadge from "@/components/LogoBadge";
 
 const Puzzle = () => {
   const navigate = useNavigate();
@@ -52,11 +52,7 @@ const Puzzle = () => {
       <div className="max-w-md mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center p-1 shadow-md mx-auto">
-            <div className="w-full h-full rounded-full bg-background flex items-center justify-center p-1.5">
-              <img src={logo} alt="PuzzAlarm" className="w-full h-full object-contain" />
-            </div>
-          </div>
+          <LogoBadge />
           <h1 className="text-2xl font-bold">Find the Odd One</h1>
           <p className="text-muted-foreground">Tap the different colored square</p>
         </div>
