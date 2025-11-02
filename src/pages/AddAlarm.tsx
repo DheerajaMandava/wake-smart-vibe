@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LogoBadge from "@/components/LogoBadge";
+import ScrollPicker from "@/components/ScrollPicker";
 
 const AddAlarm = () => {
   const navigate = useNavigate();
@@ -22,46 +23,36 @@ const AddAlarm = () => {
         </div>
 
         {/* Time Picker */}
-        <div className="flex-1 flex items-center justify-center">
-          <div className="relative w-full max-w-xs">
-            <div className="flex justify-center items-center gap-4 text-6xl font-light">
-              <select 
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="relative w-full max-w-md">
+            <div className="flex justify-center items-center gap-2">
+              <ScrollPicker
                 value={hour}
-                onChange={(e) => setHour(parseInt(e.target.value))}
-                className="h-32 w-28 bg-transparent text-center text-6xl font-light cursor-pointer focus:outline-none appearance-none"
-              >
-                {hours.map((h) => (
-                  <option key={h} value={parseInt(h)} className="bg-background text-foreground">
-                    {h}
-                  </option>
-                ))}
-              </select>
-              <span>:</span>
-              <select
+                onChange={setHour}
+                items={hours}
+                className="w-24"
+              />
+              <span className="text-4xl font-light text-muted-foreground">:</span>
+              <ScrollPicker
                 value={minute}
-                onChange={(e) => setMinute(parseInt(e.target.value))}
-                className="h-32 w-28 bg-transparent text-center text-6xl font-light cursor-pointer focus:outline-none appearance-none"
-              >
-                {minutes.map((m) => (
-                  <option key={m} value={parseInt(m)} className="bg-background text-foreground">
-                    {m}
-                  </option>
-                ))}
-              </select>
+                onChange={setMinute}
+                items={minutes}
+                className="w-24"
+              />
             </div>
             
             {/* AM/PM Toggle */}
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-3 mt-8">
               <Button
                 variant={period === "AM" ? "default" : "outline"}
-                className="w-20 h-12 rounded-full font-semibold"
+                className="w-24 h-14 rounded-full font-semibold text-lg"
                 onClick={() => setPeriod("AM")}
               >
                 AM
               </Button>
               <Button
                 variant={period === "PM" ? "default" : "outline"}
-                className="w-20 h-12 rounded-full font-semibold"
+                className="w-24 h-14 rounded-full font-semibold text-lg"
                 onClick={() => setPeriod("PM")}
               >
                 PM
