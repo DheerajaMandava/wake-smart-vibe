@@ -37,6 +37,13 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
     },
   ]);
 
+  // Audio instance for alarm sound
+  const [alarmAudio] = useState(() => {
+    const audio = new Audio("/alarm-sound.mp3");
+    audio.loop = true;
+    return audio;
+  });
+
   // Check alarms every minute
   useEffect(() => {
     const checkAlarms = () => {
@@ -73,6 +80,10 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
         ) {
           const route = taskRoutes[alarm.task] || "/task/puzzle";
           console.log("🔔 ALARM TRIGGERED!", alarm);
+          
+          // Play alarm sound
+          alarmAudio.play().catch(err => console.log("Audio play error:", err));
+          
           toast.info(`Alarm: ${alarm.time} - Complete ${alarm.task} to dismiss!`);
           window.location.href = route;
         }
@@ -83,7 +94,15 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
     checkAlarms(); // Check immediately
 
     return () => clearInterval(interval);
-  }, [alarms]);
+  }, [alarms, alarmAudio]);
+
+  // Stop alarm sound when component unmounts
+  useEffect(() => {
+    return () => {
+      alarmAudio.pause();
+      alarmAudio.currentTime = 0;
+    };
+  }, [alarmAudio]);
 
   const addAlarm = (alarm: Omit<Alarm, "id">) => {
     const newAlarm: Alarm = {
