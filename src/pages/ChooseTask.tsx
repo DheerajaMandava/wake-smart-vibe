@@ -50,6 +50,7 @@ const ChooseTask = () => {
   const { addAlarm } = useAlarms();
   const time = location.state?.time || "9:00 AM";
   const days = location.state?.days || ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  const isOnce = location.state?.isOnce || false;
 
   const handleTaskSelect = (taskName: string) => {
     addAlarm({
@@ -57,6 +58,7 @@ const ChooseTask = () => {
       days,
       isActive: true,
       task: taskName,
+      isOnce,
     });
     toast.success("Alarm created successfully!");
     setTimeout(() => navigate("/alarms"), 500);

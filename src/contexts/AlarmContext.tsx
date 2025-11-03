@@ -8,6 +8,7 @@ export interface Alarm {
   days: string[];
   isActive: boolean;
   task: string;
+  isOnce?: boolean;
 }
 
 interface AlarmContextType {
@@ -73,11 +74,11 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
           isActive: alarm.isActive
         });
 
-        if (
-          alarm.isActive &&
-          alarm.time === currentTime &&
-          alarm.days.includes(currentDay)
-        ) {
+        const shouldTrigger = alarm.isOnce 
+          ? alarm.isActive && alarm.time === currentTime
+          : alarm.isActive && alarm.time === currentTime && alarm.days.includes(currentDay);
+
+        if (shouldTrigger) {
           const route = taskRoutes[alarm.task] || "/task/puzzle";
           console.log("🔔 ALARM TRIGGERED!", alarm);
           
@@ -85,6 +86,12 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
           alarmAudio.play().catch(err => console.log("Audio play error:", err));
           
           toast.info(`Alarm: ${alarm.time} - Complete ${alarm.task} to dismiss!`);
+          
+          // Auto-disable one-time alarms after they ring
+          if (alarm.isOnce) {
+            toggleAlarm(alarm.id);
+          }
+          
           window.location.href = route;
         }
       });

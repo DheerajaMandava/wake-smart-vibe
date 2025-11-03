@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import LogoBadge from "@/components/LogoBadge";
 
 const daysOfWeek = [
@@ -18,6 +20,7 @@ const SelectDays = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const time = location.state?.time || "9:00 AM";
+  const [repeatType, setRepeatType] = useState<"repeat" | "once">("repeat");
   const [selectedDays, setSelectedDays] = useState<string[]>(["Mon", "Tue", "Wed", "Thu", "Fri"]);
 
   const toggleDay = (day: string) => {
@@ -29,10 +32,11 @@ const SelectDays = () => {
   };
 
   const handleContinue = () => {
-    if (selectedDays.length === 0) {
+    if (repeatType === "repeat" && selectedDays.length === 0) {
       return;
     }
-    navigate("/choose-task", { state: { time, days: selectedDays } });
+    const days = repeatType === "once" ? [] : selectedDays;
+    navigate("/choose-task", { state: { time, days, isOnce: repeatType === "once" } });
   };
 
   return (
@@ -47,24 +51,48 @@ const SelectDays = () => {
           </div>
         </div>
 
-        {/* Days Selection */}
-        <div className="flex-1 px-6 py-8">
-          <div className="space-y-3">
-            {daysOfWeek.map((day) => (
-              <button
-                key={day.short}
-                onClick={() => toggleDay(day.short)}
-                className={`w-full p-4 rounded-2xl font-semibold text-lg transition-all ${
-                  selectedDays.includes(day.short)
-                    ? "bg-accent text-accent-foreground"
-                    : "bg-secondary/50 text-muted-foreground hover:bg-secondary/70"
-                }`}
-              >
-                {day.full}
-              </button>
-            ))}
-          </div>
+        {/* Repeat Type Selection */}
+        <div className="px-6 py-4">
+          <RadioGroup value={repeatType} onValueChange={(value) => setRepeatType(value as "repeat" | "once")}>
+            <div className="flex gap-4">
+              <div className="flex items-center space-x-2 flex-1">
+                <RadioGroupItem value="repeat" id="repeat" />
+                <Label htmlFor="repeat" className="text-lg font-medium cursor-pointer">Repeat</Label>
+              </div>
+              <div className="flex items-center space-x-2 flex-1">
+                <RadioGroupItem value="once" id="once" />
+                <Label htmlFor="once" className="text-lg font-medium cursor-pointer">Once</Label>
+              </div>
+            </div>
+          </RadioGroup>
         </div>
+
+        {/* Days Selection */}
+        {repeatType === "repeat" && (
+          <div className="flex-1 px-6 py-8">
+            <div className="space-y-3">
+              {daysOfWeek.map((day) => (
+                <button
+                  key={day.short}
+                  onClick={() => toggleDay(day.short)}
+                  className={`w-full p-4 rounded-2xl font-semibold text-lg transition-all ${
+                    selectedDays.includes(day.short)
+                      ? "bg-accent text-accent-foreground"
+                      : "bg-secondary/50 text-muted-foreground hover:bg-secondary/70"
+                  }`}
+                >
+                  {day.full}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {repeatType === "once" && (
+          <div className="flex-1 px-6 py-8 flex items-center justify-center">
+            <p className="text-muted-foreground text-lg">Alarm will ring once at {time}</p>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="p-6 flex gap-4">
@@ -79,7 +107,7 @@ const SelectDays = () => {
           <Button
             className="flex-1 h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
             onClick={handleContinue}
-            disabled={selectedDays.length === 0}
+            disabled={repeatType === "repeat" && selectedDays.length === 0}
           >
             Choose Task
             <Check size={20} className="ml-2" />
