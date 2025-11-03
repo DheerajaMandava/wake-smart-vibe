@@ -39,6 +39,7 @@ const Alarms = () => {
               time={alarm.time}
               days={alarm.days}
               isActive={alarm.isActive}
+              task={alarm.task}
               onToggle={() => toggleAlarm(alarm.id)}
               onDelete={() => deleteAlarm(alarm.id)}
               onClick={() => navigate("/add-alarm")}
