@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { AlarmModal } from "@/components/AlarmModal";
 
 export interface Alarm {
   id: string;
@@ -16,6 +15,9 @@ interface AlarmContextType {
   addAlarm: (alarm: Omit<Alarm, "id">) => void;
   toggleAlarm: (id: string) => void;
   deleteAlarm: (id: string) => void;
+  triggeredAlarm: Alarm | null;
+  dismissAlarm: () => void;
+  completeAlarmTask: () => void;
 }
 
 const AlarmContext = createContext<AlarmContextType | undefined>(undefined);
@@ -37,13 +39,8 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
       task: "Tic-Tac-Toe",
     },
   ]);
-
-  // Audio instance for alarm sound
-  const [alarmAudio] = useState(() => {
-    const audio = new Audio("/alarm-sound.mp3");
-    audio.loop = true;
-    return audio;
-  });
+  
+  const [triggeredAlarm, setTriggeredAlarm] = useState<Alarm | null>(null);
 
   // Check alarms every minute
   useEffect(() => {
@@ -79,20 +76,13 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
           : alarm.isActive && alarm.time === currentTime && alarm.days.includes(currentDay);
 
         if (shouldTrigger) {
-          const route = taskRoutes[alarm.task] || "/task/puzzle";
           console.log("🔔 ALARM TRIGGERED!", alarm);
-          
-          // Play alarm sound
-          alarmAudio.play().catch(err => console.log("Audio play error:", err));
-          
-          toast.info(`Alarm: ${alarm.time} - Complete ${alarm.task} to dismiss!`);
+          setTriggeredAlarm(alarm);
           
           // Auto-disable one-time alarms after they ring
           if (alarm.isOnce) {
             toggleAlarm(alarm.id);
           }
-          
-          window.location.href = route;
         }
       });
     };
@@ -101,15 +91,7 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
     checkAlarms(); // Check immediately
 
     return () => clearInterval(interval);
-  }, [alarms, alarmAudio]);
-
-  // Stop alarm sound when component unmounts
-  useEffect(() => {
-    return () => {
-      alarmAudio.pause();
-      alarmAudio.currentTime = 0;
-    };
-  }, [alarmAudio]);
+  }, [alarms]);
 
   const addAlarm = (alarm: Omit<Alarm, "id">) => {
     const newAlarm: Alarm = {
@@ -131,9 +113,36 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
     setAlarms(alarms.filter((alarm) => alarm.id !== id));
   };
 
+  const dismissAlarm = () => {
+    setTriggeredAlarm(null);
+  };
+
+  const completeAlarmTask = () => {
+    if (triggeredAlarm) {
+      const route = taskRoutes[triggeredAlarm.task] || "/task/puzzle";
+      setTriggeredAlarm(null);
+      window.location.href = route;
+    }
+  };
+
   return (
-    <AlarmContext.Provider value={{ alarms, addAlarm, toggleAlarm, deleteAlarm }}>
+    <AlarmContext.Provider value={{ 
+      alarms, 
+      addAlarm, 
+      toggleAlarm, 
+      deleteAlarm,
+      triggeredAlarm,
+      dismissAlarm,
+      completeAlarmTask
+    }}>
       {children}
+      <AlarmModal
+        isOpen={!!triggeredAlarm}
+        time={triggeredAlarm?.time || ""}
+        task={triggeredAlarm?.task || ""}
+        onDismiss={dismissAlarm}
+        onComplete={completeAlarmTask}
+      />
     </AlarmContext.Provider>
   );
 };
