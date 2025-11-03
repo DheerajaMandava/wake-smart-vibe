@@ -15,9 +15,6 @@ interface AlarmContextType {
   addAlarm: (alarm: Omit<Alarm, "id">) => void;
   toggleAlarm: (id: string) => void;
   deleteAlarm: (id: string) => void;
-  triggeredAlarm: Alarm | null;
-  dismissAlarm: () => void;
-  completeAlarmTask: () => void;
 }
 
 const AlarmContext = createContext<AlarmContextType | undefined>(undefined);
@@ -113,10 +110,6 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
     setAlarms(alarms.filter((alarm) => alarm.id !== id));
   };
 
-  const dismissAlarm = () => {
-    setTriggeredAlarm(null);
-  };
-
   const completeAlarmTask = () => {
     if (triggeredAlarm) {
       const route = taskRoutes[triggeredAlarm.task] || "/task/puzzle";
@@ -130,17 +123,13 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
       alarms, 
       addAlarm, 
       toggleAlarm, 
-      deleteAlarm,
-      triggeredAlarm,
-      dismissAlarm,
-      completeAlarmTask
+      deleteAlarm
     }}>
       {children}
       <AlarmModal
         isOpen={!!triggeredAlarm}
         time={triggeredAlarm?.time || ""}
         task={triggeredAlarm?.task || ""}
-        onDismiss={dismissAlarm}
         onComplete={completeAlarmTask}
       />
     </AlarmContext.Provider>

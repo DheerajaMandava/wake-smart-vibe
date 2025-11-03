@@ -14,11 +14,10 @@ interface AlarmModalProps {
   isOpen: boolean;
   time: string;
   task: string;
-  onDismiss: () => void;
   onComplete: () => void;
 }
 
-export const AlarmModal = ({ isOpen, time, task, onDismiss, onComplete }: AlarmModalProps) => {
+export const AlarmModal = ({ isOpen, time, task, onComplete }: AlarmModalProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -37,14 +36,6 @@ export const AlarmModal = ({ isOpen, time, task, onDismiss, onComplete }: AlarmM
       }
     };
   }, [isOpen]);
-
-  const handleDismiss = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    onDismiss();
-  };
 
   const handleComplete = () => {
     if (audioRef.current) {
@@ -71,9 +62,6 @@ export const AlarmModal = ({ isOpen, time, task, onDismiss, onComplete }: AlarmM
         <AlertDialogFooter className="flex-col gap-2 sm:flex-col">
           <Button onClick={handleComplete} className="w-full" size="lg">
             Complete Task
-          </Button>
-          <Button onClick={handleDismiss} variant="outline" className="w-full">
-            Dismiss
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
