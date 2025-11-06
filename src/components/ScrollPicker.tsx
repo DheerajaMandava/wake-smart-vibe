@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface ScrollPickerProps {
@@ -11,23 +11,54 @@ interface ScrollPickerProps {
 const ScrollPicker = ({ value, onChange, items, className }: ScrollPickerProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const itemHeight = 60;
-
+  const isScrolling = useRef(false);
+  const scrollTimeout = useRef<NodeJS.Timeout>();
+  
+  // Create infinite scroll by repeating items multiple times
+  const repeats = 5;
+  const middleRepeat = Math.floor(repeats / 2);
+  const infiniteItems = Array(repeats).fill(items).flat();
+  
   useEffect(() => {
-    if (scrollRef.current) {
-      const index = parseInt(items[value]) === value ? value : items.findIndex(item => parseInt(item) === value);
-      scrollRef.current.scrollTop = index * itemHeight;
+    if (scrollRef.current && !isScrolling.current) {
+      // Find the value in the middle repeat
+      const valueIndex = items.findIndex(item => parseInt(item) === value);
+      const targetIndex = middleRepeat * items.length + valueIndex;
+      scrollRef.current.scrollTop = targetIndex * itemHeight;
     }
   }, [value, items, itemHeight]);
 
   const handleScroll = () => {
-    if (scrollRef.current) {
-      const scrollTop = scrollRef.current.scrollTop;
-      const index = Math.round(scrollTop / itemHeight);
-      const newValue = parseInt(items[index]);
-      if (newValue !== value) {
-        onChange(newValue);
-      }
+    if (!scrollRef.current) return;
+    
+    isScrolling.current = true;
+    clearTimeout(scrollTimeout.current);
+    
+    const scrollTop = scrollRef.current.scrollTop;
+    const currentIndex = Math.round(scrollTop / itemHeight);
+    const newValue = parseInt(infiniteItems[currentIndex]);
+    
+    if (newValue !== value) {
+      onChange(newValue);
     }
+    
+    // After scrolling stops, check if we need to reset position
+    scrollTimeout.current = setTimeout(() => {
+      if (!scrollRef.current) return;
+      
+      const currentScrollTop = scrollRef.current.scrollTop;
+      const currentIdx = Math.round(currentScrollTop / itemHeight);
+      const localIndex = currentIdx % items.length;
+      const currentRepeatSection = Math.floor(currentIdx / items.length);
+      
+      // If we're in the first or last repeat, reset to middle
+      if (currentRepeatSection === 0 || currentRepeatSection === repeats - 1) {
+        const newScrollTop = (middleRepeat * items.length + localIndex) * itemHeight;
+        scrollRef.current.scrollTop = newScrollTop;
+      }
+      
+      isScrolling.current = false;
+    }, 150);
   };
 
   return (
@@ -51,8 +82,8 @@ const ScrollPicker = ({ value, onChange, items, className }: ScrollPickerProps) 
         {/* Top padding */}
         <div style={{ height: `${itemHeight * 1.5}px` }} />
         
-        {/* Items */}
-        {items.map((item, index) => {
+        {/* Items - infinite scroll */}
+        {infiniteItems.map((item, index) => {
           const itemValue = parseInt(item);
           const isSelected = itemValue === value;
           
@@ -61,8 +92,10 @@ const ScrollPicker = ({ value, onChange, items, className }: ScrollPickerProps) 
               key={index}
               onClick={() => {
                 onChange(itemValue);
+                const localIndex = index % items.length;
+                const targetIndex = middleRepeat * items.length + localIndex;
                 if (scrollRef.current) {
-                  scrollRef.current.scrollTop = index * itemHeight;
+                  scrollRef.current.scrollTop = targetIndex * itemHeight;
                 }
               }}
               className={cn(
