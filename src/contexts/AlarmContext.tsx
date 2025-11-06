@@ -68,17 +68,27 @@ export const AlarmProvider = ({ children }: { children: ReactNode }) => {
           isActive: alarm.isActive
         });
 
-        const shouldTrigger = alarm.isOnce 
-          ? alarm.isActive && alarm.time === currentTime
-          : alarm.isActive && alarm.time === currentTime && alarm.days.includes(currentDay);
+        const shouldTrigger = alarm.isActive && alarm.time === currentTime && (
+          alarm.isOnce ? alarm.days.includes(currentDay) : alarm.days.includes(currentDay)
+        );
 
         if (shouldTrigger) {
           console.log("🔔 ALARM TRIGGERED!", alarm);
           setTriggeredAlarm(alarm);
           
-          // Auto-disable one-time alarms after they ring
+          // For one-time alarms, consume the current day; when no days left, disable
           if (alarm.isOnce) {
-            toggleAlarm(alarm.id);
+            setAlarms(prev =>
+              prev.map(a => {
+                if (a.id !== alarm.id) return a;
+                const remainingDays = a.days.filter(d => d !== currentDay);
+                return {
+                  ...a,
+                  days: remainingDays,
+                  isActive: remainingDays.length > 0 ? a.isActive : false,
+                };
+              })
+            );
           }
         }
       });

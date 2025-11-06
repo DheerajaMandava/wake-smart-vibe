@@ -32,10 +32,10 @@ const SelectDays = () => {
   };
 
   const handleContinue = () => {
-    if (repeatType === "repeat" && selectedDays.length === 0) {
+    if (selectedDays.length === 0) {
       return;
     }
-    const days = repeatType === "once" ? [] : selectedDays;
+    const days = selectedDays;
     navigate("/choose-task", { state: { time, days, isOnce: repeatType === "once" } });
   };
 
@@ -68,31 +68,28 @@ const SelectDays = () => {
         </div>
 
         {/* Days Selection */}
-        {repeatType === "repeat" && (
-          <div className="flex-1 px-6 py-8">
-            <div className="space-y-3">
-              {daysOfWeek.map((day) => (
-                <button
-                  key={day.short}
-                  onClick={() => toggleDay(day.short)}
-                  className={`w-full p-4 rounded-2xl font-semibold text-lg transition-all ${
-                    selectedDays.includes(day.short)
-                      ? "bg-accent text-accent-foreground"
-                      : "bg-secondary/50 text-muted-foreground hover:bg-secondary/70"
-                  }`}
-                >
-                  {day.full}
-                </button>
-              ))}
-            </div>
+        <div className="flex-1 px-6 py-8">
+          <div className="space-y-3">
+            {daysOfWeek.map((day) => (
+              <button
+                key={day.short}
+                onClick={() => toggleDay(day.short)}
+                className={`w-full p-4 rounded-2xl font-semibold text-lg transition-all ${
+                  selectedDays.includes(day.short)
+                    ? "bg-accent text-accent-foreground"
+                    : "bg-secondary/50 text-muted-foreground hover:bg-secondary/70"
+                }`}
+              >
+                {day.full}
+              </button>
+            ))}
           </div>
-        )}
-        
-        {repeatType === "once" && (
-          <div className="flex-1 px-6 py-8 flex items-center justify-center">
-            <p className="text-muted-foreground text-lg">Alarm will ring once at {time}</p>
-          </div>
-        )}
+          {repeatType === "once" && (
+            <p className="text-muted-foreground text-sm mt-4">
+              This alarm will ring once on the selected day(s).
+            </p>
+          )}
+        </div>
 
         {/* Action Buttons */}
         <div className="p-6 flex gap-4">
@@ -107,7 +104,7 @@ const SelectDays = () => {
           <Button
             className="flex-1 h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
             onClick={handleContinue}
-            disabled={repeatType === "repeat" && selectedDays.length === 0}
+            disabled={selectedDays.length === 0}
           >
             Choose Task
             <Check size={20} className="ml-2" />
